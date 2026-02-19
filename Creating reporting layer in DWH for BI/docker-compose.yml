@@ -1,0 +1,19 @@
+# PostgreSQL for running solution + QA checks
+# Usage: docker compose up -d   then  .\run-checks.ps1
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: dwh
+      POSTGRES_DB: dwh_bi
+      POSTGRES_PASSWORD: dwh
+    ports:
+      - "5433:5432"
+    volumes:
+      - .:/workspace
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dwh -d dwh_bi"]
+      interval: 2s
+      timeout: 2s
+      retries: 10
